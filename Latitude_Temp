@@ -1,0 +1,31 @@
+from geopy.geocoders import Nominatim
+
+def get_temp(lat, month):
+    temp =""
+    if abs(lat) <= 30:
+        temp = "Always Warm"
+    elif abs(lat) >= 50:
+        temp = "Always Cold"
+
+    if temp == "":
+        if (month >= 4  and month <= 8):
+            if lat < 0:
+                temp = "Cold"
+            else:
+                temp = "Warm"
+        elif (month < 4  or month > 8):
+            if lat < 0:
+                temp = "Warm"
+            else:
+                temp = "Cold"
+    return temp
+
+def getCityCoord(City):
+    geolocator=Nominatim()
+    location=geolocator.geocode(City)
+    return location.latitude,location.longitude
+
+#Takes input string of city and integer month and returns whether that city is hot or cold 
+def determine_climate(city,month):
+    lat = getCityCoord(city)[0]
+    return get_temp(lat,month)

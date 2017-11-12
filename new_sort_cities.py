@@ -1,3 +1,6 @@
+from Latitude_Temp import *
+from airport_data import *
+import pandas as pd
 from random import shuffle
 
 def shuffle_pickle_key(pickle_file):

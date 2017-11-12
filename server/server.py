@@ -13,7 +13,10 @@ import io
 import json
 import datetime
 
-import sort_cities
+import airport_data
+import get_flight_info
+
+import new_sort_cities
 import HotelFinder
 import POIFinder
 
@@ -24,9 +27,10 @@ class Service:
     def __init__(self, css=None):
         self.css = css
         self.city = ''
-        # self.availrange = ['2018-04-01', '2018-04-07']
-        self.availrange = []
-        self.dayrange = ''
+        self.availrange = ['2018-04-01', '2018-04-07']
+        # self.availrange = []
+        self.dayrange = 4
+        # self.dayrange = ''
         self.groupSize = ''
         self.groupTypes = ''
         self.moneyamount = ''
@@ -65,7 +69,7 @@ class Service:
             raise aiohttp.web.HTTPBadRequest(reason="range required")
         except ValueError:
             raise aiohttp.web.HTTPBadRequest(reason="invalid range")
-        text = sort_cities.sort_cities(self.climatetype, self.traveltype, self.availrange)
+        text = new_sort_cities.new_sort_cities(self.climatetype, self.traveltype, self.availrange)
         print(text)
         return aiohttp.web.Response(text=text)
 
@@ -167,6 +171,7 @@ class Service:
 
     @asyncio.coroutine
     def call_destination(self, request):
+        # RUN WRAPPER PROGRAM IF runcompute IS TRUE
         try:
             print(request)
             self.city = request.GET["city"]
@@ -177,8 +182,13 @@ class Service:
             raise aiohttp.web.HTTPBadRequest(reason="range required")
         except ValueError:
             raise aiohttp.web.HTTPBadRequest(reason="invalid range")
+        
+
+        zipcode = [-73.6633,42.7294]
+
+        print(get_flight_info.get_flight_info(airport_data.nearest_iata_code(zipcode[0], zipcode[1]), airport_data.get_iata_code(self.city), self.availrange[0], self.availrange[1], self.dayrange))
+
         return aiohttp.web.Response(text='Test 1 complete.')
-        # return aiohttp.web.json_response(data = POIFinder.assemblePoiData(self.city))
 
     @asyncio.coroutine
     def home(self, request):

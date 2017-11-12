@@ -1,14 +1,14 @@
 
 # coding: utf-8
 
-# In[2]:
+# In[22]:
 
+
+from amadeus import Flights
+from get_airline_name import *
+import json
 
 def get_flight_info(orig, dest, depart_date, ret_date, duration, num_results = '3'):
-
-    from amadeus import Flights
-    from get_airline_name import *
-    import json
 
     flights = Flights("S1ukqxEJjvLGcmtKD1wSPEEp9apIcsiC")
     resp = flights.low_fare_search(
@@ -20,7 +20,9 @@ def get_flight_info(orig, dest, depart_date, ret_date, duration, num_results = '
         number_of_results = num_results) #'10'
     
     # Loop over all suggested flights
-
+    if ('results' not in resp):
+        return 0
+    
     num_results = len(resp['results'])
     outbound_len = [None]*num_results
     outbound_departure_time= [None]*num_results
@@ -82,11 +84,26 @@ def get_flight_info(orig, dest, depart_date, ret_date, duration, num_results = '
             
         flight_price[i] = resp['results'][i]['fare']['total_price']
 
-    return json.dumps(outbound_len, inbound_len, outbound_departure_time, outbound_departure_location, outbound_arrival_time, outbound_arrival_location, inbound_departure_time, inbound_departure_location, inbound_arrival_time, inbound_arrival_location, flight_price, num_seats_available_inbound, num_seats_available_outbound, terminal_inbound, terminal_outbound, flight_number_inbound, flight_number_outbound, marketing_airline_inbound, marketing_airline_outbound)
+    return outbound_len, inbound_len, outbound_departure_time, outbound_departure_location, outbound_arrival_time, outbound_arrival_location, inbound_departure_time, inbound_departure_location, inbound_arrival_time, inbound_arrival_location, flight_price, num_seats_available_inbound, num_seats_available_outbound, terminal_inbound, terminal_outbound, flight_number_inbound, flight_number_outbound, marketing_airline_inbound, marketing_airline_outbound
+
+
+# In[23]:
+
+
+flight_info = get_flight_info('ALB', 'SXF', '2018-04-02', '2018-04-23', '7--7')
+flight_info
 
 
 # In[ ]:
 
 
+origin_location = 'ALB'
+depart_date = '2018-04-02'
+return_date = '2018-04-23'
+duration = '7--7'
 
+for i in kory_list:
+    flight_info = get_flight_info('ALB', i, depart_date, return_date, duration)
+    if flight_info != 0:
+        break
 

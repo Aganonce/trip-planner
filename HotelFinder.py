@@ -28,7 +28,7 @@ def findHotels(City,StartDate,EndDate,TotalCost,NumRooms):
         longitude=float(Coords[1]),
         currency='USD',
         max_rate=DailyCost,
-        radius=10)
+        radius=20)
     #print response
     #print len(response['results'])
     #print response['results'][i]['rooms'][0]['room_type_code'][1].isdigit()

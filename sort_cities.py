@@ -29,6 +29,6 @@ def sort_cities(input_climate,input_intl_dom, date_range):
             city_list.append(city)
         while_index += 1
 
-    return city_list
+    return city_list[0] + ", " + city_list[1] + ", and " + city_list[2]
 
 sort_cities("Cold","International",date_range)

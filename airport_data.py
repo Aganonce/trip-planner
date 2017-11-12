@@ -34,22 +34,21 @@ def haversine(lon1, lat1, lon2, lat2):
 
 def compare_coordinates(my_long, my_lat, data):
     coord_list = []
-    for ind, row in df.iterrows():
+    for ind, row in data.iterrows():
         target_long = float(data['coordinates'].tolist()[ind].split(",")[0])
         target_lat = float(data['coordinates'].tolist()[ind].split(",")[1])
         coord_list.append(haversine(my_long, my_lat, target_long, target_lat))
     return coord_list
 
 def nearest_airport(my_long, my_lat, data):
-    distances = compare_coordinates(my_long, my_lat, df)
+    distances = compare_coordinates(my_long, my_lat, data)
     val, idx = min((val, idx) for (idx, val) in enumerate(distances))
-    return df.iloc[idx]
+    return data.iloc[idx]
 
 def get_iata_code(df, city):
     rec = give_airport_recommendation(df, city)
     return rec["iata_code"].tolist()[0]
 
-#How to run:
-#df = load_airport_csv()
-#my_long, my_lat = -73.691785, 42.728412
-#nearest_airport(my_long, my_lat, df)
+def nearest_iata_code(my_long, my_lat):
+    df1 = load_airport_csv()
+    return nearest_airport(my_long, my_lat, df1)["iata_code"]

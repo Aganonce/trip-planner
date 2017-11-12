@@ -39,8 +39,12 @@ def findHotels(City,StartDate,EndDate,TotalCost,NumRooms):
         if HasRoom:
             RoomswithBeds.append(response['results'][i])
     CheapestRooms=[]
-    for i in range(3):
-        CheapestRooms.append(RoomswithBeds[i])
+    if len(RoomswithBeds)>=3:
+        for i in range(3):
+            CheapestRooms.append(RoomswithBeds[i])
+    else:
+        for i in range(len(RoomswithBeds)):
+            CheapestRooms.append(RoomswithBeds[i])
     return CheapestRooms
 
 

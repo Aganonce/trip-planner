@@ -76,6 +76,27 @@ def assembleHotelData(City, StartDate, EndDate, TotalCost, NumPeople):
     return orgHotelData(resp, NumPeople)
 
 
+####Get Trip TimeFrame once given window and duration
+StartDuration="2018-Jan-10"
+EndDuration="2018-Jan-30"
+TripDuration=13
+
+def getTripTime(StartWindow,EndWindow,Duration):
+    if (parser.parse(EndWindow)-parser.parse(StartWindow)).days < Duration:
+        print "Your window is too short to accomodate a trip of this length, please specify a larger window"
+    else:
+        if Duration < float((parser.parse(EndWindow)-parser.parse(StartWindow)).days)/2.0:
+            StartDate=parser.parse(StartWindow)+datetime.timedelta(days=float((parser.parse(EndWindo)-parser.parse(StartWindow)).days)/2.0)
+        else:
+            StartDate=parser.parse(StartWindow)
+    EndDate=StartDate+datetime.timedelta(days=Duration)
+    return StartDate.strftime('%Y-%m-%d'),EndDate.strftime('%Y-%m-%d')
+
+Start,End=getTripTime(StartDuration,EndDuration,TripDuration)
+print Start,End
+###End obtaining TimeFrame
+
+
 # StartDate="Jan 25 2018"
 # EndDate="Jan 30 2018"
 # TotalCost=2000

@@ -1,4 +1,5 @@
 from geopy.geocoders import Nominatim
+from dateutil import parser
 
 def get_temp(lat, month):
     temp =""
@@ -30,7 +31,6 @@ def determine_climate(city,month):
     return get_temp(lat,month)
 
 def conv_date_to_string(date_rng,ind):
-    from dateutil import parser
     dt = parser.parse(date_rng[ind])
     return dt.month
 

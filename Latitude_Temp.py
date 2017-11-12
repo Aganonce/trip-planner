@@ -4,21 +4,21 @@ from dateutil import parser
 def get_temp(lat, month):
     temp =""
     if abs(lat) <= 30:
-        temp = "Warm"
+        temp = "warm"
     elif abs(lat) >= 50:
-        temp = "Cold"
+        temp = "cold"
 
     if temp == "":
         if (month >= 4  and month <= 8):
             if lat < 0:
-                temp = "Cold"
+                temp = "cold"
             else:
-                temp = "Warm"
+                temp = "warm"
         elif (month < 4  or month > 8):
             if lat < 0:
-                temp = "Warm"
+                temp = "warm"
             else:
-                temp = "Cold"
+                temp = "cold"
     return temp
 
 def getCityCoord(City):
@@ -42,6 +42,6 @@ def get_final_temp(city, date_range):
     print temp
     
     if temp[0] != temp[1]:
-        return "Cold"
+        return "cold"
     else:
         return temp[0]

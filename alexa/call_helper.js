@@ -1,6 +1,6 @@
 var _ = require('lodash');
 var rp = require('request-promise');
-var apiAddress = 'http://54.71.101.118:49154';
+var apiAddress = '';
 
 function tripCaller() {
 }

@@ -45,6 +45,10 @@ def nearest_airport(my_long, my_lat, data):
     val, idx = min((val, idx) for (idx, val) in enumerate(distances))
     return df.iloc[idx]
 
+def get_iata_code(df, city):
+    rec = give_airport_recommendation(df, city)
+    return rec["iata_code"].tolist()[0]
+
 #How to run:
 #df = load_airport_csv()
 #my_long, my_lat = -73.691785, 42.728412

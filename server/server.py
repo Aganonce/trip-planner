@@ -26,7 +26,7 @@ import POIFinder
 class Service:
     def __init__(self, css=None):
         self.css = css
-        self.city = ''
+        self.city = "Chicago"
         self.availrange = ['2018-04-01', '2018-04-07']
         # self.availrange = []
         self.dayrange = 4
@@ -35,13 +35,14 @@ class Service:
         self.groupTypes = ''
         self.moneyamount = ''
         self.spendingtype = ''
-        # self.traveltype = 'International'
-        self.traveltype = ''
-        self.zipcode = []
-        # self.climatetype = 'Warm'
-        self.climatetype = ''
+        self.traveltype = 'international'
+        # self.traveltype = ''
+        self.zipcode = [-73.6633,42.7294]
+        self.climatetype = 'Warm'
+        # self.climatetype = ''
         self.calculated_temp = ''
         self.flightnumber = ''
+        self.flightdata = []
 
     @asyncio.coroutine
     def call_flight_type(self, request):
@@ -56,6 +57,7 @@ class Service:
         # print(POIFinder.assemblePoiData(self.city))
         # print(HotelFinder.assembleHotelData(self.city, self.availrange[0], self.availrange[1], float(self.moneyamount), int(self.groupSize)))
         data = [POIFinder.assemblePoiData(self.city), HotelFinder.assembleHotelData(self.city, self.availrange[0], self.availrange[1], float(self.moneyamount), int(self.groupSize))]
+        print(data)
         return aiohttp.web.json_response(data = data)
         # return aiohttp.web.Response(text='Hurr durr I am a hotel.')
 
@@ -77,7 +79,7 @@ class Service:
     def call_travel_type(self, request):
         try:
             print(request)
-            self.traveltype = request.GET["traveltype"].capitalize()
+            self.traveltype = request.GET["traveltype"]
             self.zipcode = request.GET["zip"].split('|')
             print(self.zipcode)
             self.zipcode = [float(i) for i in self.zipcode]
@@ -95,14 +97,26 @@ class Service:
         try:
             print(request)
             self.spendingtype = request.GET["spendingtype"]
-            self.runcompute = request.GET["runcompute"]
-            print(self.runcompute)
+            runcompute = request.GET["runcompute"]
+            print(runcompute)
             print(self.spendingtype)
         except KeyError:
             raise aiohttp.web.HTTPBadRequest(reason="range required")
         except ValueError:
             raise aiohttp.web.HTTPBadRequest(reason="invalid range")
-        return aiohttp.web.Response(text='Test 7 complete.')
+
+        flight_data = []
+        flight_cards = [[], [], []]
+        if (runcompute == 'true'):
+            flight_data = get_flight_info.get_flight_info(airport_data.nearest_iata_code(self.zipcode[0], self.zipcode[1]), airport_data.get_iata_code(self.city), self.availrange[0], self.availrange[1], self.dayrange)
+            self.flightdata = flight_data
+            for i in range(2):
+                for j in range(len(flight_data)):
+                    flight_cards[i].append(flight_data[j][i])
+            print(flight_cards[0])
+            return aiohttp.web.json_response(data = flight_cards)
+        else:
+            return aiohttp.web.Response(text='Test 7 complete.')
 
     @asyncio.coroutine
     def call_finance_amount(self, request):
@@ -173,22 +187,38 @@ class Service:
     def call_destination(self, request):
         # RUN WRAPPER PROGRAM IF runcompute IS TRUE
         try:
-            print(request)
+            # print(request)
             self.city = request.GET["city"]
-            self.runcompute = request.GET["runcompute"]
-            print(self.runcompute)
-            print(self.city)
+            runcompute = request.GET["runcompute"]
+            # print(self.runcompute)
+            # print(self.city)
         except KeyError:
             raise aiohttp.web.HTTPBadRequest(reason="range required")
         except ValueError:
             raise aiohttp.web.HTTPBadRequest(reason="invalid range")
         
 
-        zipcode = [-73.6633,42.7294]
+        # zipcode = [-73.6633,42.7294]
 
-        print(get_flight_info.get_flight_info(airport_data.nearest_iata_code(zipcode[0], zipcode[1]), airport_data.get_iata_code(self.city), self.availrange[0], self.availrange[1], self.dayrange))
+        # print(airport_data.give_airport_recommendation(df, self.city))
 
-        return aiohttp.web.Response(text='Test 1 complete.')
+        city_temp = self.city
+
+        flight_data = []
+        flight_cards = [[], [], []]
+        # runcompute = 'true'
+        print(runcompute)
+        if (runcompute == 'true'):
+            print('running lol')
+            flight_data = get_flight_info.get_flight_info(airport_data.nearest_iata_code(self.zipcode[0], self.zipcode[1]), airport_data.get_iata_code(city_temp), self.availrange[0], self.availrange[1], self.dayrange)
+            self.flightdata = flight_data
+            for i in range(2):
+                for j in range(len(flight_data)):
+                    flight_cards[i].append(flight_data[j][i])
+            print(flight_data)
+            return aiohttp.web.json_response(data = flight_cards)
+        else:
+            return aiohttp.web.Response(text='Test 1 complete.')
 
     @asyncio.coroutine
     def home(self, request):

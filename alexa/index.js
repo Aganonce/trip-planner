@@ -19,7 +19,11 @@ var zip = "-73.6633|42.7294";
 
 var groupSize = 0;
 
-var availrange = ''
+var availrange = '';
+
+var poi_data = [];
+
+// var card_data = [[2, 2, '2018-04-01T06:38', 'ALB', '2018-04-01T14:42', 'YXU', '2018-04-07T13:40', 'YXU', '2018-04-07T21:02', 'ALB', '719.50', [9, 9, 6], [9, 9, 9], ['1', 'A', 'TBD'], ['C', '1', 'TBD'], ['8646', '8200', '3955'], ['4992', '4265', '8661'], ['UA', 'UA', 'UA'], ['UA', 'UA', 'UA']], [2, 2, '2018-04-01T17:30', 'ALB', '2018-04-02T07:12', 'YXU', '2018-04-07T21:20', 'YXU', '2018-04-08T21:02', 'ALB', '805.25', [9, 7, 4], [4, 9, 9], ['1', '2', 'TBD'], ['1', '1', 'TBD'], ['8656', '511', '5286'], ['5287', '514', '8641'], ['AC', 'AC', 'AC'], ['AC', 'AC', 'AC']], [2, 2, '2018-04-01T06:00', 'ALB', '2018-04-01T15:49', 'YXU', '2018-04-07T16:20', 'YXU', '2018-04-08T11:24', 'ALB', '851.62', [7, 9, 9], [9, 9, 7], ['3', 'I', 'TBD'], ['S', '3', 'TBD'], ['7111', '1893', '2401'], ['2352', '2569', '7649'], ['DL', 'DL', 'DL'], ['DL', 'DL', 'DL']]]
 
 /*
 ---START SKILL---
@@ -55,13 +59,26 @@ app.intent('askDestination', {
     if (stage >= 7) {
       return tripCall.callDestination(city, true).then(function(response) {
         console.log(response);
-        prompt += ' I sent you data on the top three flights there to your companion app. Look through the flight options and take your time. Once you\'ve found a flight that you like, say Alexa, tell trip planner that I choose flight number one, two, or three.';
+        prompt += ' I sent you data on the top flights there to your companion app. Look through the flight options and take your time. Once you\'ve found a flight that you like, say Alexa, tell trip planner that I choose flight number one, two, or so on.';
         stage = 10
+
+        text = ""
+        for (i = 0; i < 2; i++) {
+          title = "Flight Options";
+          specific_card = response[i]
+          text += "Option #" + (i + 1) + "\nOutbound stops: " + specific_card[0] + ". Inbound stops: " + specific_card[1] + ". Outbound departure time: " + specific_card[2] + ". Outbound departure location: " 
+            + specific_card[3] + ". Outbound arrival time: " + specific_card[4] + ". Outbound arrival location: " + specific_card[5] + ". Inbound departure time: " + specific_card[6] + ". Inbound departure location: " 
+            + specific_card[7] + ". Inbound arrival time: " + specific_card[8] + ". Inbound arrival location: " + specific_card[9] + ". Round-trip flight price: $" + specific_card[10] + ".\nInbound Flights: " 
+            + specific_card[17][0] + " " + specific_card[15][0] + " at terminal " + specific_card[13][0] + " to " + specific_card[17][1] + " " + specific_card[15][1] + " at terminal " + specific_card[13][1]
+            + " to " + specific_card[17][2] + " " + specific_card[15][2] + " at terminal " + specific_card[13][2] + ".\nOutbound flights: " + specific_card[18][0] + " " + specific_card[16][0] + " at terminal " + specific_card[14][0]
+            + " to " + specific_card[18][1] + " " + specific_card[16][1] + " at terminal " + specific_card[14][1] + '.\n';
+        
+        }
 
         res.card({
           type: "Standard",
-          title: "Chess Master",
-          text: "You are the white pieces. Alexa is the black pieces.",
+          title: title,
+          text: text,
           // image: { // image is optional 
           //   smallImageUrl: cardCallUrl, // required 
           //   largeImageUrl: cardCallUrl
@@ -168,7 +185,7 @@ app.intent('askTravelGroup', {
     } else if (groupSize > 2) {
       return tripCall.callTravelGroupSize(travelGroupSize).then(function(response) {
         console.log(response);
-        prompt += 'Are these other peeps friends or family, dawg? Yo.';
+        prompt += 'Are these other people friends or family?';
         stage = 4
         res.say(prompt).shouldEndSession(false).send();
       });        
@@ -251,13 +268,26 @@ app.intent('askSpendingType', {
     } else {
       return tripCall.callSpendingType(spendingtype, true).then(function(response) {
         console.log(response);
-        prompt = 'Okay. I am sending you the top three flights on your companion app. Look through the options and take your time. Once you\'ve found a flight that you like, say Alexa, tell trip planner that I choose flight number one, two, or three.';        
+        prompt = 'Okay. I am sending you the top flights on your companion app. Look through the options and take your time. Once you\'ve found a flight that you like, say Alexa, tell trip planner that I choose flight number one, two, or so on.';        
         stage = 10;
+
+        text = ""
+        for (i = 0; i < 2; i++) {
+          title = "Flight Options";
+          specific_card = response[i]
+          text += "Option #" + (i + 1) + "\nOutbound stops: " + specific_card[0] + ". Inbound stops: " + specific_card[1] + ". Outbound departure time: " + specific_card[2] + ". Outbound departure location: " 
+            + specific_card[3] + ". Outbound arrival time: " + specific_card[4] + ". Outbound arrival location: " + specific_card[5] + ". Inbound departure time: " + specific_card[6] + ". Inbound departure location: " 
+            + specific_card[7] + ". Inbound arrival time: " + specific_card[8] + ". Inbound arrival location: " + specific_card[9] + ". Round-trip flight price: $" + specific_card[10] + ".\nInbound Flights: " 
+            + specific_card[17][0] + " " + specific_card[15][0] + " at terminal " + specific_card[13][0] + " to " + specific_card[17][1] + " " + specific_card[15][1] + " at terminal " + specific_card[13][1]
+            + " to " + specific_card[17][2] + " " + specific_card[15][2] + " at terminal " + specific_card[13][2] + ".\nOutbound flights: " + specific_card[18][0] + " " + specific_card[16][0] + " at terminal " + specific_card[14][0]
+            + " to " + specific_card[18][1] + " " + specific_card[16][1] + " at terminal " + specific_card[14][1] + '.\n';
+        
+        }
 
         res.card({
           type: "Standard",
-          title: "Chess Master",
-          text: "You are the white pieces. Alexa is the black pieces.",
+          title: title,
+          text: text,
           // image: { // image is optional 
           //   smallImageUrl: cardCallUrl, // required 
           //   largeImageUrl: cardCallUrl
@@ -311,7 +341,7 @@ app.intent('askClimateType', {
     var climatetype = req.slot('CLIMATE_TYPE');
     return tripCall.callClimateType(climatetype).then(function(response) {
       console.log(response);
-      prompt = 'My algorithm suggests these top three locations: ' + response + '. Which one do you prefer?';
+      prompt = 'My program suggests these top three locations: ' + response + '. Which one do you prefer?';
       stage = 9;
       res.say(prompt).shouldEndSession(false).send();
     });
@@ -334,14 +364,31 @@ app.intent('askFlightNumber', {
   function(req, res) {
     var flightnumber = req.slot('FLIGHT_NUMBER');
     return tripCall.callFlightNumber(flightnumber).then(function(response) {
-      console.log(response);
-      prompt = 'I have sent three of the best hotel options to your companion app. If you are interested in seeing points of interest as well, say show me points of interest, otherwise say stop to exit the skill.';
+      // console.log(response);
+      prompt = 'I have sent some of the best hotel options to your companion app. If you are interested in seeing points of interest as well, say show me points of interest, otherwise say stop to exit the skill.';
       stage = 11;
+
+      var hotel_data = response[1];
+      poi_data = response[0];
+
+      console.log(hotel_data);
+
+      text = '';
+      for (i = 0; i < 3; i++) {
+        // console.log(hotel_data[i])
+        if (hotel_data[i][4] != 0) {
+        text += "Hotel #" + (i + 1) + "\n" 
+          + "Name: " + hotel_data[i][0] + "\n"
+          + "Location: " + hotel_data[i][3] + ", " + hotel_data[i][2] + "\n"
+          + "Cost: $" + hotel_data[i][4] + "\n"
+          + "Booking code: " + hotel_data[i][5] + "\n";
+        }
+      }
 
       res.card({
         type: "Standard",
-        title: "Chess Master",
-        text: "You are the white pieces. Alexa is the black pieces.",
+        title: "Hotels",
+        text: text,
         // image: { // image is optional 
         //   smallImageUrl: cardCallUrl, // required 
         //   largeImageUrl: cardCallUrl
@@ -362,15 +409,30 @@ app.intent('showPointsOfInterest', {
   'utterances': ['Show me points of interest.']
 },
   function(req, res) {
+
+    text = '';
+    for (i = 0; i < 3; i++) {
+      text += "POI #" + (i + 1) + "\n" 
+        + "Name: " + poi_data[i][0] + "\n"
+        + "Ranking: " + poi_data[i][2] + "\n"
+        + "Link: " + poi_data[i][1] + "\n";
+    }
+
     res.card({
       type: "Standard",
-      title: "Chess Master",
-      text: "You are the white pieces. Alexa is the black pieces.",
+      title: "Points of Interest",
+      text: text,
       // image: { // image is optional 
       //   smallImageUrl: cardCallUrl, // required 
       //   largeImageUrl: cardCallUrl
       // }
     });
+
+    stage = 0;
+    groupSize = 0;
+    poi_data = [];
+    availrange = ''
+    unknownDestination = false;
 
     res.say("I have sent some points of interest to your companion app. Thank you for using Trip Planner.").shouldEndSession(true).send();
   }
@@ -406,7 +468,9 @@ app.intent("AMAZON.StopIntent", {
   function(req, res) {
     stage = 0;
     groupSize = 0;
+    poi_data = [];
     availrange = ''
+    unknownDestination = false;
     var prompt = 'Goodbye.';;
     res.say(prompt);
   }
@@ -419,7 +483,9 @@ app.intent("AMAZON.CancelIntent", {
   function(req, res) {
     stage = 0;
     groupSize = 0;
+    poi_data = [];
     availrange = ''
+    unknownDestination = false;
     var prompt = 'Goodbye.';;
     res.say(prompt);
   }
@@ -430,8 +496,7 @@ app.intent('AMAZON.HelpIntent', {
   "utterances": []
 },
   function(req, res) {
-    var prompt = "What the fuck did you just fucking say about me, you little bitch? I’ll have you know I graduated top of my class in the Navy Seals, and I’ve been involved in numerous secret raids on Al-Quaeda, and I have over 300 confirmed kills. I am trained in gorilla warfare and I’m the top sniper in the entire US armed forces. You are nothing to me but just another target. I will wipe you the fuck out with precision the likes of which has never been seen before on this Earth, mark my fucking words. You think you can get away with saying that shit to me over the Internet? Think again, fucker. As we speak I am contacting my secret network of spies across the USA and your IP is being traced right now so you better prepare for the storm, maggot. The storm that wipes out the pathetic little thing you call your life. You’re fucking dead, kid. I can be anywhere, anytime, and I can kill you in over seven hundred ways, and that’s just with my bare hands. Not only am I extensively trained in unarmed combat, but I have access to the entire arsenal of the United States Marine Corps and I will use it to its full extent to wipe your miserable ass off the face of the continent, you little shit. If only you could have known what unholy retribution your little “clever” comment was about to bring down upon you, maybe you would have held your fucking tongue. But you couldn’t, you didn’t, and now you’re paying the price, you goddamn idiot. I will shit fury all over you and you will drown in it. You’re fucking dead, kiddo."
-
+    var prompt = "I cannot help you right now. Sorry!"
     res.say(prompt).shouldEndSession(true);
   }
 );

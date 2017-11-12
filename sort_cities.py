@@ -2,20 +2,20 @@ from Latitude_Temp import *
 from airport_data import *
 import pandas as pd
 
-date_range = ['2017-06-15', '2017-09-30']
-input_climate = "Cold"
-input_intl_dom = "Domestic"
-my_long, my_lat = -73.691785, 42.728412
-input_coords = [my_long, my_lat]
+#date_range = ['2017-06-15', '2017-09-30']
+#input_climate = "Cold"
+#input_intl_dom = "Domestic"
+#my_long, my_lat = -73.691785, 42.728412
+#input_coords = [my_long, my_lat]
 df = load_airport_csv()
 
 def intl_or_domestic(city):
     try:
         country = give_airport_recommendation(df,city)["iso_country"].tolist()[0]
         if country == "US":
-            return "Domestic"
+            return "domestic"
         else:
-            return "International"
+            return "international"
     except:
         return "None"
 
@@ -31,4 +31,4 @@ def sort_cities(input_climate,input_intl_dom, date_range):
 
     return city_list[0] + ", " + city_list[1] + ", and " + city_list[2]
 
-sort_cities("Cold","International",date_range)
+#sort_cities("cold","international",date_range)

@@ -9,14 +9,31 @@ def load_airport_csv():
     df = pd.concat(pieces, ignore_index = True)
     return df
 
+#def give_airport_recommendation(df, city):
+#    dfrec = df[df.values == city]
+#    if (len(dfrec[dfrec.values == "large_airport"]) != 0 and len(dfrec) != 1):
+#        dfrec = dfrec[dfrec.values == "large_airport"]
+#        if len(dfrec[dfrec.values == city]) != 1:
+#            dfrec = dfrec.iloc[[0]]
+#    return dfrec.iloc[[0]]
 def give_airport_recommendation(df, city):
-    dfrec = df[df.values == city]
-    if (len(dfrec[dfrec.values == "large_airport"]) != 0 and len(dfrec) != 1):
-        dfrec = dfrec[dfrec.values == "large_airport"]
-        if len(dfrec[dfrec.values == city]) != 1:
-            dfrec = dfrec.iloc[[0]]
-    return dfrec.iloc[[0]]
+    droplist = []
+    for ind, row in df.iterrows():
+        #print df['municipality'][ind], type(city)
+        if df['municipality'].iloc[ind] != city:
+            droplist.append(ind)
             
+    df = df.drop(df.index[droplist])
+            
+    print df, len(df)
+    if (len(df[df.values == "large_airport"]) != 0 and len(df) != 1):
+        dfrec = df[df.values == "large_airport"]
+        if len(df[df.values == city]) != 1:
+            df = df.iloc[[0]]
+    return df.iloc[[0]]
+
+
+
 def haversine(lon1, lat1, lon2, lat2):
     """
     Calculate the great circle distance between two points 

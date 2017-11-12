@@ -24,7 +24,7 @@ def get_airline_name(two_letter_code):
 # In[14]:
 
 
-get_airline_name('AA')
+get_airline_name('AA').values[0]
 
 
 # In[ ]:

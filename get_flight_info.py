@@ -7,6 +7,7 @@
 def get_flight_info(orig, dest, depart_date, ret_date, duration, num_results = '3'):
 
     from amadeus import Flights
+    from get_airline_name import *
     import json
 
     flights = Flights("S1ukqxEJjvLGcmtKD1wSPEEp9apIcsiC")
@@ -59,7 +60,7 @@ def get_flight_info(orig, dest, depart_date, ret_date, duration, num_results = '
             else:
                 terminal_outbound[i].append('TBD')
             flight_number_outbound[i].append(j['flight_number'])
-            marketing_airline_outbound[i].append(j['marketing_airline'])
+            marketing_airline_outbound[i].append(get_airline_name(j['marketing_airline']))
             
         # Inbound
         inbound_len[i] = len(resp['results'][i]['itineraries'][0]['inbound']['flights']) - 1
@@ -77,7 +78,7 @@ def get_flight_info(orig, dest, depart_date, ret_date, duration, num_results = '
             else:
                 terminal_inbound[i].append('TBD')
             flight_number_inbound[i].append(j['flight_number'])
-            marketing_airline_inbound[i].append(j['marketing_airline'])
+            marketing_airline_inbound[i].append(get_airline_name(j['marketing_airline']))
             
         flight_price[i] = resp['results'][i]['fare']['total_price']
 

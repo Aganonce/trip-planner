@@ -4,9 +4,9 @@ from dateutil import parser
 def get_temp(lat, month):
     temp =""
     if abs(lat) <= 30:
-        temp = "Always Warm"
+        temp = "Warm"
     elif abs(lat) >= 50:
-        temp = "Always Cold"
+        temp = "Cold"
 
     if temp == "":
         if (month >= 4  and month <= 8):

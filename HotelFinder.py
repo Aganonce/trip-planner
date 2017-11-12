@@ -1,4 +1,3 @@
-from urllib2 import Request, urlopen, URLError
 import json
 from geopy.geocoders import Nominatim
 from amadeus import Hotels
@@ -48,9 +47,9 @@ def findHotels(City,StartDate,EndDate,TotalCost,NumRooms):
     return CheapestRooms
 
 
-def orgHotelData(Hotel):
-    tmp=[[0]*8 for x in xrange(3)]
-    print tmp[0]
+def orgHotelData(Hotel, NumPeople):
+    tmp=[[0]*6 for x in range(3)]
+    # print tmp[0]
     for i in range(len(Hotel)):
         HotelName=Hotel[i]['property_name']
         tmp[i][0]=HotelName
@@ -63,27 +62,29 @@ def orgHotelData(Hotel):
         tmp[i][3]=HotelLine
         TotPrice=NumPeople*float(Hotel[i]['total_price']['amount'])
         tmp[i][4]=TotPrice
-        if len(Hotel[i]['awards'])!=0:
-            AwardProvider=Hotel[i]['awards'][0]['provider']
-            AwardRating=Hotel[i]['awards'][0]['rating']
-        tmp[i][5]=AwardProvider
-        tmp[i][6]=AwardRating
+        # if len(Hotel[i]['awards'])!=0:
+        #     AwardProvider=Hotel[i]['awards'][0]['provider']
+        #     AwardRating=Hotel[i]['awards'][0]['rating']
+        # tmp[i][5]=AwardProvider
+        # tmp[i][6]=AwardRating
         BookingCode=Hotel[i]['rooms'][0]['booking_code']
-        tmp[i][7]=BookingCode
+        tmp[i][5]=BookingCode
     return tmp
 
+def assembleHotelData(City, StartDate, EndDate, TotalCost, NumPeople):
+    resp=findHotels(City,StartDate,EndDate,TotalCost,NumPeople)
+    return orgHotelData(resp, NumPeople)
+
+
+# StartDate="Jan 25 2018"
+# EndDate="Jan 30 2018"
+# TotalCost=2000
+# NumPeople=1
+# Days=5
+# resp=findHotels("Albany",StartDate,EndDate,TotalCost,NumPeople)
 
 
 
-StartDate="Jan 25 2018"
-EndDate="Jan 30 2018"
-TotalCost=2000
-NumPeople=1
-Days=5
-resp=findHotels("Albany",StartDate,EndDate,TotalCost,NumPeople)
 
-
-
-
-print orgHotelData(resp)
+# print orgHotelData(resp)
 

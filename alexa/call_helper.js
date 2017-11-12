@@ -1,56 +1,25 @@
 var _ = require('lodash');
 var rp = require('request-promise');
-var apiAddress = 'https://www.echochess.xyz';
+var apiAddress = 'http://54.71.101.118:49154';
 
-function chessEngine() {
+function tripCaller() {
 }
 
-// Passes in and out chess moves
-chessEngine.prototype.requestEngineMove = function(playerMove, accessToken) {
-  if (accessToken !== '') {
-    return this.movePieceCall(playerMove, accessToken).then(
-      function(response) {
-        // console.log(response.body.return_play);
-        return response.body.return_play;
-      }
-    );
-  } else {
-    var error_response = "I'm sorry, the alexa is having trouble understanding you right now. Please try again.";
-    return error_response;
-  }
-};
-
-// Calls chess api with player move to get engine move
-chessEngine.prototype.movePieceCall = function(playerMove, accessToken) {
-  var options = {
-    method: 'GET',
-    uri: apiAddress + '/move',
-    qs: {
-      player_move: playerMove,
-      access_token: accessToken
-    },
-    resolveWithFullResponse: true,
-    json: true
-  };
-  return rp(options);
-};
-
-// Returns if chess row exists
-chessEngine.prototype.requestFileExists = function(accessToken) {
-  return this.fileCheckCall(accessToken).then(
+tripCaller.prototype.callDestination = function(city, runcompute) {
+  return this.destinationCall(city, runcompute).then(
     function(response) {
-      return response.body.file_exists
+      return response.body
     }
   );
 };
 
-// Calls chess api with existence of chess row
-chessEngine.prototype.fileCheckCall = function(accessToken) {
+tripCaller.prototype.destinationCall = function(city, runcompute) {
   var options = {
     method: 'GET',
-    uri: apiAddress + '/returning',
+    uri: apiAddress + '/call_destination',
     qs: {
-      access_token: accessToken
+      city: city,
+      runcompute: runcompute
     },
     resolveWithFullResponse: true,
     json: true
@@ -58,22 +27,20 @@ chessEngine.prototype.fileCheckCall = function(accessToken) {
   return rp(options);
 };
 
-// Returns if chess row exists and was deleted
-chessEngine.prototype.requestFileDelete = function(accessToken) {
-  return this.fileDeleteCall(accessToken).then(
+tripCaller.prototype.callAvailabilityRange = function(availrange) {
+  return this.availabilityRangeCall(availrange).then(
     function(response) {
-      return response.body.file_exists
+      return response.body
     }
   );
 };
 
-// Calls chess api to delete existing game row
-chessEngine.prototype.fileDeleteCall = function(accessToken) {
+tripCaller.prototype.availabilityRangeCall = function(availrange) {
   var options = {
     method: 'GET',
-    uri: apiAddress + '/new',
+    uri: apiAddress + '/call_availability_range',
     qs: {
-      access_token: accessToken
+      availrange: availrange
     },
     resolveWithFullResponse: true,
     json: true
@@ -81,27 +48,20 @@ chessEngine.prototype.fileDeleteCall = function(accessToken) {
   return rp(options);
 };
 
-// Returns difficulty level of user
-chessEngine.prototype.requestDifficultyLevel = function(accessToken) {
-  if (accessToken !== '') {
-    return this.checkDifficultyCall(accessToken).then(
-      function(response) {
-        return response.body.user_difficulty
-      }
-    );
-  } else {
-    var error_response = "I'm sorry, the alexa is having trouble understanding you right now. Please try again.";
-    return error_response;
-  }
+tripCaller.prototype.callOptimalRange = function(dayrange) {
+  return this.optimalRangeCall(dayrange).then(
+    function(response) {
+      return response.body
+    }
+  );
 };
 
-// Calls chess api to get difficulty level of user
-chessEngine.prototype.checkDifficultyCall = function(accessToken) {
+tripCaller.prototype.optimalRangeCall = function(dayrange) {
   var options = {
     method: 'GET',
-    uri: apiAddress + '/difficulty',
+    uri: apiAddress + '/call_optimal_range',
     qs: {
-      access_token: accessToken
+      dayrange: dayrange
     },
     resolveWithFullResponse: true,
     json: true
@@ -109,4 +69,153 @@ chessEngine.prototype.checkDifficultyCall = function(accessToken) {
   return rp(options);
 };
 
-module.exports = chessEngine;
+tripCaller.prototype.callTravelGroupSize = function(travelGroupSize) {
+  return this.travelGroupSizeCall(travelGroupSize).then(
+    function(response) {
+      return response.body
+    }
+  );
+};
+
+tripCaller.prototype.travelGroupSizeCall = function(travelGroupSize) {
+  var options = {
+    method: 'GET',
+    uri: apiAddress + '/call_travel_group_size',
+    qs: {
+      travelGroupSize: travelGroupSize
+    },
+    resolveWithFullResponse: true,
+    json: true
+  };
+  return rp(options);
+};
+
+tripCaller.prototype.callTravelGroupTypes = function(groupTypes) {
+  return this.travelGroupTypesCall(groupTypes).then(
+    function(response) {
+      return response.body
+    }
+  );
+};
+
+tripCaller.prototype.travelGroupTypesCall = function(groupTypes) {
+  var options = {
+    method: 'GET',
+    uri: apiAddress + '/call_travel_group_types',
+    qs: {
+      groupTypes: groupTypes
+    },
+    resolveWithFullResponse: true,
+    json: true
+  };
+  return rp(options);
+};
+
+tripCaller.prototype.callFinanceAmount = function(moneyamount) {
+  return this.financeAmountCall(moneyamount).then(
+    function(response) {
+      return response.body
+    }
+  );
+};
+
+tripCaller.prototype.financeAmountCall = function(moneyamount) {
+  var options = {
+    method: 'GET',
+    uri: apiAddress + '/call_finance_amount',
+    qs: {
+      moneyamount: moneyamount
+    },
+    resolveWithFullResponse: true,
+    json: true
+  };
+  return rp(options);
+};
+
+tripCaller.prototype.callSpendingType = function(spendingtype, runcompute) {
+  return this.spendingTypeCall(spendingtype, runcompute).then(
+    function(response) {
+      return response.body
+    }
+  );
+};
+
+tripCaller.prototype.spendingTypeCall = function(spendingtype, runcompute) {
+  var options = {
+    method: 'GET',
+    uri: apiAddress + '/call_spending_type',
+    qs: {
+      spendingtype: spendingtype,
+      runcompute: runcompute
+    },
+    resolveWithFullResponse: true,
+    json: true
+  };
+  return rp(options);
+};
+
+tripCaller.prototype.callTravelType = function(traveltype, zip) {
+  return this.travelTypeCall(traveltype, zip).then(
+    function(response) {
+      return response.body
+    }
+  );
+};
+
+tripCaller.prototype.travelTypeCall = function(traveltype, zip) {
+  var options = {
+    method: 'GET',
+    uri: apiAddress + '/call_travel_type',
+    qs: {
+      traveltype: traveltype,
+      zip: zip
+    },
+    resolveWithFullResponse: true,
+    json: true
+  };
+  return rp(options);
+};
+
+tripCaller.prototype.callClimateType = function(climatetype) {
+  return this.climateTypeCall(climatetype).then(
+    function(response) {
+      return response.body
+    }
+  );
+};
+
+tripCaller.prototype.climateTypeCall = function(climatetype) {
+  var options = {
+    method: 'GET',
+    uri: apiAddress + '/call_climate_type',
+    qs: {
+      climatetype: climatetype
+    },
+    resolveWithFullResponse: true,
+    json: true
+  };
+  return rp(options);
+};
+
+tripCaller.prototype.callFlightNumber = function(flightnumber) {
+  return this.flightNumberCall(flightnumber).then(
+    function(response) {
+      return response.body
+    }
+  );
+};
+
+tripCaller.prototype.flightNumberCall = function(flightnumber) {
+  var options = {
+    method: 'GET',
+    uri: apiAddress + '/call_flight_type',
+    qs: {
+      flightnumber: flightnumber
+    },
+    resolveWithFullResponse: true,
+    json: true
+  };
+  return rp(options);
+};
+
+module.exports = tripCaller;

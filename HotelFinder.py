@@ -1,8 +1,3 @@
-
-# coding: utf-8
-
-# In[1]:
-
 from urllib2 import Request, urlopen, URLError
 import json
 from geopy.geocoders import Nominatim
@@ -11,21 +6,13 @@ from dateutil import parser
 import datetime
 import numpy as np
 
-
-# In[3]:
-
 AmadeusAPIKey="6LmigYdQ45sVgfinoP8SSZDfYXcj0b3B"
-
-
-# In[4]:
 
 def getCityCoord(City):
     geolocator=Nominatim()
     location=geolocator.geocode(City)
     return location.latitude,location.longitude
 
-
-# In[18]:
 
 def findHotels(City,StartDate,EndDate,TotalCost,NumRooms):
     sd=parser.parse(StartDate)
@@ -57,8 +44,6 @@ def findHotels(City,StartDate,EndDate,TotalCost,NumRooms):
     return CheapestRooms
 
 
-# In[87]:
-
 def orgHotelData(Hotel):
     tmp=[[0]*8 for x in xrange(3)]
     print tmp[0]
@@ -84,7 +69,7 @@ def orgHotelData(Hotel):
     return tmp
 
 
-# In[20]:
+
 
 StartDate="Jan 25 2018"
 EndDate="Jan 30 2018"
@@ -94,7 +79,7 @@ Days=5
 resp=findHotels("Albany",StartDate,EndDate,TotalCost,NumPeople)
 
 
-# In[88]:
 
-orgHotelData(resp)
+
+print orgHotelData(resp)
 
